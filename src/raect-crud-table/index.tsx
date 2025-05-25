@@ -28,8 +28,8 @@ const CrudTableWork = () => {
       ...prevState,
       isAddedRow: true,
       tableData: [
-        { id: "", key: "", name: "", age: 0, address: "" },
-        ...prevState.tableData!,
+        { id: "", name: "",key:1, age: 0, address: "" },
+        ...prevState.tableData.map((item, index) => ({...item, key: index+2})) ?? [],
       ],
     }));
   };
@@ -38,23 +38,35 @@ const CrudTableWork = () => {
       ...prevState,
       isAddedRow: false,
       selectedRowId: null,
-      tableData: [...prevState.tableData!.filter((item) => item.id )],
+      tableData: [...prevState.tableData!.filter((item) => item.id)],
     }));
   };
-  const onSave = () => {
-    const obj = getValues();
-    reset();
+  const onSave = (record: DataType) => {
+    const obj = getValues() as Omit<DataType, "id" | "key">;
+    const name = obj.name ?? record.name;
+    const age = obj.age ?? record.age;
+    const address = obj.address ?? record.address;
+    const formData = {
+      id: uuid(),
+      name,
+      age,
+      address,
+    } as DataType;
+    if (!name || !age || !address) return;
 
     setState((prevState) => ({
       ...prevState,
-      isAddedRow: false,
-      tableData: prevState.tableData!.map((item) => {
-        if (!item.id || item.id === state.selectedRowId ) {
-          return { ...item, id: uuid(), key: uuid(), ...obj };
-        }
-        return item;
-      }),
+      tableData: prevState
+        .tableData!.map((item, index) => {
+          if (!item.id || item.id === state.selectedRowId) {
+            return {...formData, key: index + 1 };
+          }
+          return item;
+        })
+        .filter((item) => item.id),
     }));
+
+    reset();
   };
 
   const onEditRow = (id: string) => {
@@ -86,6 +98,8 @@ const CrudTableWork = () => {
           selectedRowId: state.selectedRowId,
         })}
         dataSource={state.tableData}
+        pagination={{ pageSize: 10 }}
+        // scroll={{ y: 55 * 5 }}
       />
     </>
   );
