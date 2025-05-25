@@ -1,5 +1,4 @@
 import { Input as AntdInput, type InputProps } from "antd";
-import type { FC } from "react";
 import { Controller, type Control, type FieldValues, type RegisterOptions } from "react-hook-form";
 
 interface IControledInputProps extends InputProps {
@@ -7,7 +6,7 @@ interface IControledInputProps extends InputProps {
     rulues?: Omit<RegisterOptions<FieldValues, string>, "disabled" | "valueAsNumber" | "valueAsDate" | "setValueAs">,
     errorMessage?: string,
 }
-const Input: FC<IControledInputProps> = ({ name = "", control, errorMessage,rulues,...rest }) => {
+const Input = ({ name = "", control, errorMessage,rulues,...rest }: IControledInputProps) => {
   return (
    <>
     <Controller
