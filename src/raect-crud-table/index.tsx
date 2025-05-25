@@ -38,7 +38,9 @@ const CrudTableWork = () => {
       ...prevState,
       isAddedRow: false,
       selectedRowId: null,
-      tableData: [...prevState.tableData!.filter((item) => item.id)],
+      tableData: [...prevState.tableData!.filter((item) => item.id)].map((item, index) => {
+        return {...item, key: index + 1 };
+      }),
     }));
   };
   const onSave = (record: DataType) => {
@@ -97,9 +99,10 @@ const CrudTableWork = () => {
           onEditRow,
           selectedRowId: state.selectedRowId,
         })}
+        rowKey={item => item.id || ""}
         dataSource={state.tableData}
         pagination={{ pageSize: 10 }}
-        // scroll={{ y: 55 * 5 }}
+        // scroll={{ y: 55 * 75 }}
       />
     </>
   );

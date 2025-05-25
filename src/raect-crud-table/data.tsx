@@ -65,6 +65,7 @@ export const Columns = ({
     title: "Age",
     dataIndex: "age",
     key: "age",
+    sorter: (a, b) => a.age - b.age,
     render: (age, record) => {
       if (age && selectedRowId !== record.id) {
         return <span>{age > 0 ? age : ""}</span>;

@@ -94,15 +94,18 @@ const Table = <T extends Record<string, any>>({...rest}: TableProps<T>) => {
         }
       },
     },
-    render: (text) => text,
+   // render: (text) => text,
   });
 
-  rest.columns = rest?.columns?.map(
-    (column: ColumnType<T> | { dataIndex?: string }) => ({
-      ...column,
-      ...getColumnSearchProps(column?.dataIndex as string),
-    })
-  );
+
+rest.columns = rest?.columns?.map((column) => {
+  const searchProps = getColumnSearchProps(column.dataIndex as string);
+  return {
+    ...column,
+    ...searchProps,
+    render: column.render || searchProps.render,
+  };
+});
 
   return (
     <>
